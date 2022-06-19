@@ -182,6 +182,13 @@ def opt_conductivity(
     if adpt_smr:
         cprint("WARNING: Adaptive smearing is an experimental feature and has not been extensively tested.", 'red')
 
+    save_data = True    # By RJW
+    if save_data:
+        cprint("===================================================", 'yellow')
+        cprint(" saving dipole related data:", 'yellow')
+        cprint("===================================================", 'yellow')
+        np.savez('berri_dip.npz', AA=data.Xbar('AA'),D_H=data.D_H,A_H=data.A_H)
+
     # iterate over ik, simple summation
     for ik in range(data.nk):
         # E - omega
