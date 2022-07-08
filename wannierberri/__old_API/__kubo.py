@@ -182,12 +182,13 @@ def opt_conductivity(
     if adpt_smr:
         cprint("WARNING: Adaptive smearing is an experimental feature and has not been extensively tested.", 'red')
 
-    save_data = True    # By RJW
-    if save_data:
+    if 1 - __debug__:
         cprint("===================================================", 'yellow')
         cprint(" saving dipole related data:", 'yellow')
         cprint("===================================================", 'yellow')
         np.savez('berri_dip.npz', AA=data.Xbar('AA'),D_H=data.D_H,A_H=data.A_H)
+    #endif
+
 
     # iterate over ik, simple summation
     for ik in range(data.nk):
@@ -274,6 +275,14 @@ def opt_conductivity(
 
             # generalized derivative is fourth index of A, we put it into third index of Imn
             Imn = np.einsum('nmca,mnb->nmabc', A, B) + np.einsum('nmba,mnc->nmabc', A, B)
+
+            if 1 - __debug__:
+                import wannierberri.common as common
+                cprint(" The global loop index is: ", 'blue')
+                print(common.count)
+                common.wDdipole[common.count, ik] = A
+                common.wint_dipole[common.count, ik] = B
+            #endif
 
             delta_mn = delta
 

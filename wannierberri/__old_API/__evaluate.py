@@ -50,12 +50,30 @@ def process(paralfunc, K_list, parallel, symgroup=None, remote_parameters={}):
 
     print("# K-points calculated  Wall time (sec)  Est. remaining (sec)", flush=True)
     res = []
+
+    if 1 - __debug__:
+        import wannierberri.common as common
+        system = remote_parameters['_system']
+        grid = remote_parameters['_grid']
+        common.init_mat(system, grid)  # prepare wint_dipole, wDdipole
+    #endif
+
     nstep_print = parallel.progress_step(numK, parallel.npar_K)
     if parallel.method == 'serial':
         for count, Kp in enumerate(dK_list):
+            if 1 - __debug__:
+                common.count = count
+            #endif
+
             res.append(paralfunc(Kp, **remote_parameters))
             if (count + 1) % nstep_print == 0:
                 print_progress(count + 1, numK, t0)
+
+        if 1 - __debug__:
+            np.savez("wint_dipole.npz", wint_dipole=common.wint_dipole)
+            np.savez("wDdipole.npz", wDdipole=common.wDdipole)
+        #endif
+
     elif parallel.method == 'ray':
         num_remotes = len(remotes)
         num_remotes_calculated = 0
