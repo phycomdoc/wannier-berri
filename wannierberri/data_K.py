@@ -234,6 +234,8 @@ class Data_K(System):
 
         for i in range(der):
             shape_cR = np.shape(self.cRvec_wcc)
+            # RJW
+            # import ipdb; ipdb.set_trace()
             XX_R = 1j * XX_R.reshape((XX_R.shape) + (1, )) * self.cRvec_wcc.reshape(
                 (shape_cR[0], shape_cR[1], self.system.nRvec) + (1, ) * len(XX_R.shape[3:]) + (3, ))
         return self._rotate((self.fft_R_to_k(XX_R, hermitean=hermitean))[self.select_K])
@@ -420,4 +422,6 @@ class Data_K(System):
     @lazy_property.LazyProperty
     def A_H(self):
         '''Generalized Berry connection matrix, A^(H) as defined in eqn. (25) of 10.1103/PhysRevB.74.195118.'''
+        # RJW
+        # import ipdb; ipdb.set_trace()
         return self.Xbar('AA') + 1j * self.D_H

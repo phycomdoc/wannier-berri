@@ -187,6 +187,14 @@ def opt_conductivity(
         cprint(" saving dipole related data:", 'yellow')
         cprint("===================================================", 'yellow')
         np.savez('berri_dip.npz', AA=data.Xbar('AA'),D_H=data.D_H,A_H=data.A_H)
+        ### RJW note: due to pyfftw, it can not be pickled
+        # import pickle
+        # with open('berri.pickle', 'wb') as f:
+        #     pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
+
+        np.savez('berri_collect.npz', iRvec=data.system.iRvec)
+        np.savez('berri_AA_R.npz', AA_R=data.system.AA_R)
+
     #endif
 
 
